@@ -1,0 +1,7 @@
+http://bnb.bg/Statistics/StExternalSector/StExchangeRates/StERForeignCurrencies/index.htm?download=xml&search=&lang=BG
+http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml
+
+
+https://jqueryui.com/autocomplete/
+https://github.com/devbridge/jQuery-Autocomplete
+http://www.tutorialrepublic.com/twitter-bootstrap-tutorial/bootstrap-typeahead.php

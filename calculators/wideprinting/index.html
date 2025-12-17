@@ -1,0 +1,894 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+  	<meta http-equiv="content-type" content="text/html; charset=windows-1251">
+    <script src="js/jquery-1.6.1.min.js"  type="text/javascript"></script>
+    <script src="js/calc-object.js" type="text/javascript"></script>
+    
+    <style>
+      /* base style */
+@media screen
+{      
+      body, select { 
+				font-family: Verdana, Tahoma, Helvetica, Arial;
+				font-size: 10px;
+			}
+ 
+ .select, .input {
+	background: url('images/input_bg.png') repeat-x;
+	border: 1px solid #e7e7e7;
+	padding: 3px;
+	color: #676767;
+	font-size: 11px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
+input.num{
+	text-align: right;
+}
+
+
+
+
+.select option {
+	background: #f9f9f9;
+/*	text-align: center;*/
+}
+.button{
+/*	background: url('images/submit_btn_bg.png') repeat-x;*/
+	background-color: #f67c17;
+	height: 25px;
+	border: 1px solid #666;/*#237793*/
+	color: #fff;
+	font-weight: bold;
+	font-size: 12px;
+	padding: 0 1px;
+	cursor: pointer;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+
+}
+	
+.clac_logo {
+	position: absolute;
+	margin: -10px 0px 0px 10px;
+	/*
+	width: 23px;
+	height: 23px;
+	background-color: #f67c17;
+	border: 1px #666 solid;
+	text-align: center;
+	padding-top: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+*/	
+}				
+      fieldset{
+				border: 1px solid #cccccc;
+				width: 200px; 
+				text-align: left;
+				background: #ffffff url(images/bg_two.png) repeat-x;
+				padding: 2px;
+			}
+			legend {
+				font-size: 14px;
+				border: 1px solid #cccccc;
+				background-color: #eeeeee;
+				color: #66666;
+				font-weight: bold;
+			/*	padding: 3px 10px 3px 15px;*/
+			padding: 2px 10px 2px 15px;
+				margin-left: 10px;
+				border-top-left-radius: 3px; 	
+				-moz-border-radius-topleft: 3px;
+				-webkit-border-top-left-radius: 3px;
+				/*
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	*/
+			}
+#calc_logo_header{
+				font-size: 14px;
+				border: 1px solid #cccccc;
+				background-color: #eeeeee;
+				color: #66666;
+				font-weight: bold;
+				width: 185px;
+				text-align: right;
+				padding-right: 5px;
+				padding-bottom: 3px;
+				/*
+				border-top-left-radius: 3px; 	
+				-moz-border-radius-topleft: 3px;
+				-webkit-border-top-left-radius: 3px;
+				*/
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+				
+				position: absolute;
+				margin: -15px 0px 0px 10px;
+}
+			
+.calc_title{
+	color: #666;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.4em;
+}
+.label {
+	color: #666;
+	font-weight: bold;
+}
+.label_title{
+	padding-left: 15px;
+	text-align: left;
+}
+
+	 .sum_num {
+		color: #666;
+	 
+	 	font-weight: bold;
+	 	text-align: right;
+	 }
+			
+   .ie60{
+	 	width: 60px;
+	 }
+   .ie80{
+	 	width: 80px;
+	 }
+   .ie120{
+	 	width: 120px;
+	 }
+   .ie140{
+	 	width: 140px;
+	 }
+   .ie160{
+	 	width: 160px;
+	 }
+   .ie180{
+	 	width: 180px;
+	 }
+	 
+/* Calc msg begin */
+div#msg_log{
+	top: 25%;
+	left: 32%;
+	position: absolute;
+
+}
+div.msg_dialog{
+	border: 1px solid;
+	width: 450px;
+	padding: 10px;
+	left: 32%;
+	margin-bottom: 5px;
+}
+div.close_msg{
+	color: #000;
+	font-weight: bold;
+	font-size: 8px;
+	text-align: right;
+	float: right;
+	cursor: pointer;
+}
+div.msg_content{
+	font-size: 12px;
+}
+.info {
+.color: #00529B;
+background-color: #BDE5F8;
+}
+.success {
+.color: #4F8A10;
+background-color: #DFF2BF;
+}
+.warning {
+color: #9F6000;
+background-color: #FEEFB3;
+}
+.error {
+color: #D8000C;
+background-color: #FFBABA;
+}
+
+
+}
+
+/* popup begin */
+/*Calc msg end */	 
+    </style>
+    <script type="text/javascript">
+     	var MSG_ERROR = '1';
+    	var MSG_WARNING = '2';
+    	var MSG_INFO = '3';
+    	var MSG_SUCCESS = '4';
+		var URL_PARAMS = getUrlVars();
+
+
+			$(document).ready(function(){
+				//Clear Calc Form begin 
+			  $('#paper_reset').click(function(){
+			  		clear_error_log();
+				    $('#invoice_form').find(':input').each(function() {
+				        switch(this.type) {
+				            case 'password':
+				            case 'select-multiple':
+				            case 'select-one':
+				            case 'text':
+				            case 'textarea':
+				                $(this).val('');
+				                break;
+				            case 'checkbox':
+				            case 'radio':
+				                this.checked = false;
+				        }
+				    });	
+					  	return false;
+			  });
+				
+				//Clear Calc Form end			
+				
+				//Calc Action Begin 
+			$('#paper_calc').click(function(){
+				clear_error_log();
+				var paper_cnt = $('#paper_cnt').val();
+				var paper_width = $('#paper_width').val();
+				var paper_height = $('#paper_height').val();
+				if ($('#paper_rwidth').val() == '') {
+					$('#paper_rwidth').val(0)
+				}
+				if ($('#paper_rheight').val() == '') {
+					$('#paper_rheight').val(0)
+				}
+			
+				if (paper_width == '' ){
+					add_msg('В полето (широчина ) не е въведена стойност!',MSG_ERROR);
+					return false;
+				}
+				if (isNaN(parseInt(paper_width))) {
+					add_msg('В полето (широчина ) може да съдържа само цифри!',MSG_ERROR);
+					return false;
+				}
+
+				if (paper_height == '' ){
+					add_msg('В полето (височина ) не е въведена стойност!',MSG_ERROR);
+					return false;
+				}
+				if (isNaN(parseInt(paper_height))) {
+					add_msg('В полето (височина ) може да съдържа само цифри!',MSG_ERROR);
+					return false;
+				}
+
+				//var paper_cnt =new RegExp("\\d{7}", "g")
+				if (paper_cnt == '') {
+					add_msg('В полето (брой ) не е въведена стойност!',MSG_ERROR);
+					return false;
+				} else if (isNaN(parseInt(paper_cnt))) {
+					add_msg('В полето (брой ) може да съдържа само цифри!',MSG_ERROR);
+					return false;
+				} else {
+					
+					var SEWING = null;
+					var sewing_val = $('#paper_sewing').val();
+					
+					var _width = 0;
+					var _rwidth = 0;
+					var _height = 0;
+					var _rheight = 0;
+						
+					switch(sewing_val) {
+						case 'SEWING_2':
+							var _width = parseFloat(paper_width);
+							var _rwidth = parseFloat($('#paper_rwidth').val());
+							var W = ((_width+_rwidth)*0.01);
+
+//							var W = (parseFloat($('#paper_width').val())+parseFloat($('#paper_rwidth').val()));
+							SEWING = (W*6);
+							break;
+						case 'SEWING_3':
+							var _height = parseFloat(paper_height);
+							var _rheight = parseFloat($('#paper_rheight').val());
+							var H = ((_height+_rheight)*0.01);
+
+//							var H = (parseFloat($('#paper_height').val())+parseFloat($('#paper_rheight').val()));
+							SEWING = (H*6);
+							break;
+						case 'SEWING_4':
+							var _width = parseFloat(paper_width);
+							var _rwidth = parseFloat($('#paper_rwidth').val());
+							var _height = parseFloat(paper_height);
+							var _rheight = parseFloat($('#paper_rheight').val());
+
+							var W = ((_width+_rwidth)*0.01);
+							var H = ((_height+_rheight)*0.01);
+//							var W = (parseFloat($('#paper_width').val())+parseFloat($('#paper_rwidth').val()));
+//							var H = (parseFloat($('#paper_height').val())+parseFloat($('#paper_rheight').val()));
+							SEWING = ((W+H)*6);
+							break;
+						case 'SEWING_1':
+							default:
+							SEWING = 0;
+							break;
+					}
+					
+					var CAPS = null;
+					var caps_val = $('#paper_caps').val();
+					var _width = 0;
+					var _rwidth = 0;
+					var _height = 0;
+					var _rheight = 0;
+					
+					switch(caps_val) {
+						case 'CAPS_2':
+							var _width = parseFloat(paper_width);
+							var _rwidth = parseFloat($('#paper_rwidth').val());
+							var W = ((_width+_rwidth)*0.01);
+//							var W = (parseFloat($('#paper_width').val())+parseFloat($('#paper_rwidth').val()));
+							CAPS = (W*8);
+							break;
+						case 'CAPS_3':
+//							var H = (parseFloat($('#paper_height').val())+parseFloat($('#paper_rheight').val()));
+							var _height = parseFloat(paper_height);
+							var _rheight = parseFloat($('#paper_rheight').val());
+							var H = ((_height+_rheight)*0.01);
+							CAPS = (H*8);
+							break;
+						case 'CAPS_4':
+							var _width = parseFloat(paper_width);
+							var _rwidth = parseFloat($('#paper_rwidth').val());
+							var _height = parseFloat(paper_height);
+							var _rheight = parseFloat($('#paper_rheight').val());
+
+							var W = ((_width+_rwidth)*0.01);
+							var H = ((_height+_rheight)*0.01);
+//							var W = (parseFloat($('#paper_width').val())+parseFloat($('#paper_rwidth').val()));
+//							var H = (parseFloat($('#paper_height').val())+parseFloat($('#paper_rheight').val()));
+							CAPS = ((W+H)*8);
+							break;
+						case 'CAPS_1':
+							default:
+							CAPS = 0;
+							break;
+					}
+					
+					var MEDIA_TYPE = $('#paper_media').val();
+					switch (MEDIA_TYPE) {
+						case 'MEDIA_1':
+								if ($('#paper_sewing').val() != 'SEWING_1') {
+									add_msg('Операцията "шиене" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_caps').val() != 'CAPS_1') {
+									add_msg('Операцията "поставяне на капси" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_2':
+								if ($('#paper_sewing').val() != 'SEWING_1') {
+									add_msg('Операцията "шиене" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_caps').val() != 'CAPS_1') {
+									add_msg('Операцията "поставяне на капси" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}	
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_3':
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_4':
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								break;
+						case 'MEDIA_5':
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_6':
+								if ($('#paper_sewing').val() != 'SEWING_1') {
+									add_msg('Операцията "шиене" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_caps').val() != 'CAPS_1') {
+									add_msg('Операцията "поставяне на капси" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_7':
+								if ($('#paper_sewing').val() != 'SEWING_1') {
+									add_msg('Операцията "шиене" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_caps').val() != 'CAPS_1') {
+									add_msg('Операцията "поставяне на капси" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_8':
+								if ($('#paper_sewing').val() != 'SEWING_1') {
+									add_msg('Операцията "шиене" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_caps').val() != 'CAPS_1') {
+									add_msg('Операцията "поставяне на капси" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_9':
+								if ($('#paper_sewing').val() != 'SEWING_1') {
+									add_msg('Операцията "шиене" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_caps').val() != 'CAPS_1') {
+									add_msg('Операцията "поставяне на капси" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_10':
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_11':
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+						case 'MEDIA_12':
+								if ($('#paper_lamination').val() != '0') {
+									add_msg('Операцията "ламиниране" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_backing').val() != '0') {
+									add_msg('Операцията "каширане" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+								if ($('#paper_cut_border').val() != '0') {
+									add_msg('Операцията "рязане по контур" не е възможна за избраната от вас медиа! За повече информация се обадете на тел.: 02 490 49 49!',MSG_ERROR);
+									return false;
+								}
+							break;
+					}
+					
+					var params = {
+						'B':parseFloat(media_format_type[$('#paper_media').val()][$('#paper_resolution').val()])
+						, 'C':parseFloat($('#paper_lamination').val())
+						, 'D':parseFloat($('#paper_backing').val())
+						, 'E':parseFloat(SEWING)
+						, 'F':parseFloat(CAPS)
+						, 'J':parseFloat($('#paper_cut_border').val())
+						, 'L':parseFloat($('#paper_file').val())
+						, 'K':parseFloat(paper_cnt)
+						, 'W':(parseInt(parseFloat(paper_width)+parseFloat($('#paper_rwidth').val()))*0.01)
+						, 'H':(parseInt(parseFloat(paper_height)+parseFloat($('#paper_rheight').val()))*0.01)
+					}
+/*
+						, 'W':(parseFloatpaper_width+parseFloat($('#paper_rwidth').val())*0.01)
+						, 'H':(parseFloat(paper_height)+parseFloat($('#paper_rheight').val())*0.01)
+
+*/
+/*
+					var html = 'DEBUG:<br>'+
+						'широчина L: '+params['H']+'<br>'+
+						'височина M: '+params['W']+'<br>'+
+						'резолюция: '+params['B']+'<br>'+
+						'ламиниране: '+params['C']+'<br>'+
+						'каширане: '+params['D']+'<br>'+
+						'шиене: '+params['E']+'<br>'+
+						'поставяне на капси: '+params['F']+'<br>'+
+						'рязане по контур: '+params['J']+'<br>'+
+						'файл: '+params['L']+'<br>'+
+						'брой'+params['K']+'<br>';
+add_msg(html,MSG_SUCCESS);
+*/
+					build_calculator(params);
+					return false;
+				}
+				
+			});		  
+				
+				//Calc Action edn
+			$('#paper_export').click(function(){
+				openPrintWindow();
+				return false;
+			
+			});
+			
+			});
+			
+			function add_msg(msg, type) {
+					parent.msg_add(msg, type);
+			}
+			function clear_error_log() {
+				$('div#msg_log').html('');
+				parent.document.getElementById('msg_wrapp').innerHTML = '';
+				
+				$('#single_sum').html('0,00 лв/бр');
+				$('#sum_total').html('0,00 лв');
+				$('#sum_vat_total').html('0,00 лв');
+			
+				
+			}
+			function hide_msg(div) {
+				$(div).parent().fadeOut();
+			}
+			
+			function openPrintWindow() {
+				//765,600
+
+				var paper_width = ($('#paper_width').val()+' + '+$('#paper_rwidth').val());
+				var paper_height = ($('#paper_height').val()+' + '+$('#paper_rheight').val());
+
+				var url = 
+					'print.php?'+
+					'media='+escape($('#paper_media option:selected').text())+	
+					'&width='+escape(paper_width)+
+					'&height='+escape(paper_height)+
+					'&resolution='+escape($('#paper_resolution option:selected').text())+
+					'&lamination='+escape($('#paper_lamination option:selected').text())+
+					'&backing='+escape($('#paper_backing option:selected').text())+
+					'&sewing='+escape($('#paper_sewing option:selected').text())+
+					'&caps='+escape($('#paper_caps option:selected').text())+
+					'&border='+escape($('#paper_cut_border option:selected').text())+
+					'&file='+escape($('#paper_file option:selected').text())+
+					'&cnt='+escape($('#paper_cnt').val())+
+					'&sum='+escape($('#single_sum').html())+
+					'&total='+escape($('#sum_total').html())+
+					'&vat='+escape($('#sum_vat_total').html());
+						
+					var w_l = window.location.href;
+					w_l = w_l.toString();
+					w_l = w_l.replace('index.html?opt_id='+URL_PARAMS['opt_id'],''); 
+					
+					var params = {'act':'save','calc_params':''+w_l+url+'','image_id':URL_PARAMS['opt_id']};
+					$.ajax({
+						type : 'POST',
+						url : '../../ajax/calculator-ajax.php',
+						dataType : 'html',
+						cache: false,
+						data: params,
+						success : function(data){
+					    //$('div#ajax_box').html('');
+							add_msg('Калкулатора е експортиран успешно!', MSG_SUCCESS);
+							parent.document.getElementById('c_export_view_'+URL_PARAMS['opt_id']).innerHTML = data;
+							parent.document.getElementById('c_export_'+URL_PARAMS['opt_id']).value = data;
+						
+						},
+						error : function(XMLHttpRequest, textStatus, errorThrown) {
+					    add_msg('Error: '+errorThrown, MSG_ERROR);
+						}
+					});
+
+			}
+
+		function getUrlVars(){
+		    var vars = [], hash;
+		    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		    for(var i = 0; i < hashes.length; i++)
+		    {
+		        hash = hashes[i].split('=');
+		        vars.push(hash[0]);
+		        vars[hash[0]] = unescape(hash[1]);
+		    }
+		    return vars;
+		}	
+			
+    </script>
+  </head>
+  <body>
+ <center>
+<div id="invoice_calc"> 
+<br>
+<fieldset>
+	<form id="invoice_form"> 
+
+<table border="0" cellspacing="0" cellpadding="0">
+	<colgroup>
+		<col width="100">
+		<col width="100">
+	</colgroup>
+ 	<tr>
+ 		<td colspan="2">
+			<div id="calc_logo_header">
+						<div class="clac_logo">
+						<img src="images/calc_logo.png" alt="" title="Широкоформатен печат">
+						</div>
+			
+			Широкоформатен
+			
+			</div>
+		</td>
+ 	</tr>
+
+
+ 	<tr style="text-align:left;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 широчина 
+		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		 раздувки
+		 </div>
+
+ 		&nbsp;&nbsp;&nbsp;<input type="text" id="paper_width" name="paper_width" class="input ie60 num" value="">&nbsp;
+		 +&nbsp;<input type="text" id="paper_rwidth" name="paper_rwidth" class="input ie60 num" value="">
+		 &nbsp;см
+		</td>
+ 	</tr>
+ 	<tr style="text-align:left;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 височина
+		 </div>
+
+ 		&nbsp;&nbsp;&nbsp;<input type="text" id="paper_height" name="paper_height" class="input ie60 num" value="">&nbsp;
+		 +&nbsp;<input type="text" id="paper_rheight" name="paper_rheight" class="input ie60 num" value="">
+		 см
+		</td>
+ 	</tr>
+ 	
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 медиа
+ 		</div>
+		<select id="paper_media" name="paper_media" class="select ie180">
+			<option value="MEDIA_1">бяло/прозрачно лепящо PVC фолио</option>
+			<option value="MEDIA_2">малки стикери бяло/прозрачно лепящо PVC фолио</option>
+			<option value="MEDIA_3">винил</option>
+			<option value="MEDIA_4">винилова мрежа</option>
+			<option value="MEDIA_5">PET филм 240 mic/330 гр.</option>
+			<option value="MEDIA_6">PVC перфофолио</option>
+			<option value="MEDIA_7">бяла хартия 120 гр.</option>
+			<option value="MEDIA_8">фотохартия 170 гр.</option>
+			<option value="MEDIA_9">автомобилно CAST фолио</option>
+			<option value="MEDIA_10">канаваца</option>
+			<option value="MEDIA_11">плат за знамена</option>
+			<option value="MEDIA_12">беклит филм</option>
+		</select>
+		</td>
+ 	</tr>
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 резолюция
+ 		</div>
+		<select id="paper_resolution" name="paper_resolution" class="select ie180">
+			<option value="720DPI">720 dpi</option>
+			<option value="1440DPI">1440 dpi</option>
+		</select>
+		</td>
+ 	</tr>
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 ламиниране
+ 		</div>
+		<select id="paper_lamination" name="paper_lamination" class="select ie180">
+			<option value="0">Не</option>
+			<option value="10">обикновен ламинат</option>
+			<option value="30">CAST и подов ламинат</option>
+		</select>
+		</td>
+ 	</tr>
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 каширане
+ 		</div>
+		<select id="paper_backing" name="paper_backing" class="select ie180">
+			<option value="0">Не</option>
+			<option value="25">Да</option>
+			<option value="45">На място</option>
+		</select>
+		</td>
+ 	</tr>
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 шиене
+ 		</div>
+		<select id="paper_sewing" name="paper_sewing" class="select ie180">
+			<option value="SEWING_1">Не</option>
+			<option value="SEWING_2">по широчините</option>
+			<option value="SEWING_3">по височините</option>
+			<option value="SEWING_4">по всички страни</option>
+		</select>
+		</td>
+ 	</tr>
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 поставяне на капси
+ 		</div>
+		<select id="paper_caps" name="paper_caps" class="select ie180">
+			<option value="CAPS_1">Не</option>
+			<option value="CAPS_2">по широчините</option>
+			<option value="CAPS_3">по височините</option>
+			<option value="CAPS_4">по всички страни</option>
+		</select>
+		</td>
+ 	</tr>
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 рязане по контур
+ 		</div>
+		<select id="paper_cut_border" name="paper_cut_border" class="select ie180">
+			<option value="0">Не</option>
+			<option value="30">Да</option>
+		</select>
+		</td>
+ 	</tr>
+ 	<tr style="text-align:center;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 файл
+ 		</div>
+		<select id="paper_file" name="paper_file" class="select ie180">
+			<option value="10">готов файл за печат</option>
+			<option value="30">готов файл за печат на малки стикери</option>
+			<option value="30">предпечат по идеен проект</option>
+			<option value="50">дизайн и проект - ниска сложност</option>
+			<option value="100">дизайн и проект - висока сложност</option>
+		</select>
+		</td>
+ 	</tr>
+
+
+ 	<tr style="text-align:left;">
+ 		<td colspan="2" class="label">
+		 <br>
+		 <div class="label_title">
+		 брой
+		 </div>
+
+ 		&nbsp;&nbsp;&nbsp;<input type="text" id="paper_cnt" name="paper_cnt" class="input ie60 num" value=""></td>
+ 	</tr>
+ 	<tr>
+ 		<td colspan="2" style="text-align:center;">&nbsp;<hr></td>
+ 	</tr>
+	<tr>
+		<td colspan="2">
+		<table style="border-collapse: collapse; border:1px #ccc solid;" width="100%" border="0" cellspacing="0" cellpadding="2">
+	<colgroup>
+		<col width="115">
+		<col width="85">
+	</colgroup>
+		 	<tr style="background-color: #f67c17; color:#fff;" class="sum_num">
+		 		<td>ед.цена без ДДС:</td>
+		 		<td id="single_sum">0,00 лв/бр</td>
+		 	</tr>
+		 	<tr style="background-color: #f67c17; color:#fff;"  class="sum_num">
+		 		<td>общо без ДДС:</td>
+		 		<td id="sum_total">0,00 лв</td>
+		 	</tr>
+		 	<tr style="background-color: #f67c17; color:#fff;"  class="sum_num">
+		 		<td>ТОТАЛ:</td>
+		 		<td id="sum_vat_total">0,00 лв</td>
+		 	</tr>
+		</table>
+		<br>
+	</tr>
+	</td>
+ 	<tr>
+ 		<td colspan="2" style="text-align:center;">&nbsp;</td>
+ 	</tr>
+ 	<tr>
+ 		<td colspan="2" style="text-align:center;">
+		 <input type="image" id="paper_calc" value="" src="images/btn_calc.png">
+		 <input type="image" id="paper_reset" value="" src="images/btn_clear.png">
+		 <input type="image" id="paper_export" value="" src="images/btn_export.png">
+   
+		 </td>
+ 	</tr>
+
+</table>
+
+
+	</form>
+</fieldset>
+</div>
+</center> 
+	<div id="msg_log">
+
+	
+	</div>
+
+
+	
+
+  </body>
+</html>

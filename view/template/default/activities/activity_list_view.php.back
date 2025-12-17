@@ -1,0 +1,186 @@
+	<div class="filter_box">
+		<table width="100%" class="form" border="0" cellspacing="0" cellpadding="1">
+			<tr>
+			  <td>No Поръчка</td>
+			  <td><input type="text" name="filter_doc_num" class="ie120" value="<?php echo $pflt_filter["filter_doc_num"]; ?>"></td>
+				<td>Статус</td>
+				<td>
+				<select id="filter_card_status" name="filter_card_status"  class="ie180">
+					<!--<option value="*" <?php echo $pflt_filter["filter_card_status"] == "*"?" selected":""; ?>> - Избери статус - </option>-->
+					<option value="<?php echo CARD_STATUS_W;?>" <?php echo $pflt_filter["filter_card_status"] == CARD_STATUS_W?" selected":""; ?>> <?php echo $GLOBALS["CARD_STATUS"][CARD_STATUS_W]; ?> </option>
+					<option value="<?php echo CARD_STATUS_F;?>" <?php echo $pflt_filter["filter_card_status"] == CARD_STATUS_F?" selected":""; ?>> <?php echo $GLOBALS["CARD_STATUS"][CARD_STATUS_F]; ?> </option>
+				</select>
+				
+				</td>
+				<td>Крайна дата</td>
+				<td>
+  				<select id="filter_activity_date" name="filter_activity_date"  class="ie180">
+  	<!--				<option value="*" <?php echo $pflt_filter["filter_activity_date"] == "*"?" selected":""; ?>> - Избери тип дата - </option>-->
+  					<option value="<?php echo ACTIVITY_DATE_TYPE_A;?>" <?php echo $pflt_filter["filter_activity_date"] == ACTIVITY_DATE_TYPE_A?" selected":""; ?>> <?php echo $GLOBALS["ACTIVITY_DATE_TYPES"][ACTIVITY_DATE_TYPE_A]; ?> </option>
+  					<option value="<?php echo ACTIVITY_DATE_TYPE_O;?>" <?php echo $pflt_filter["filter_activity_date"] == ACTIVITY_DATE_TYPE_O?" selected":""; ?>> <?php echo $GLOBALS["ACTIVITY_DATE_TYPES"][ACTIVITY_DATE_TYPE_O]; ?> </option>
+  				</select>
+				</td>
+				<td valign="top">
+				  <div><a href="javascript: void(0);" class="order-by" onclick="orderByActivities(this, 'desc');">&uarr;</a></div>
+				  <div><a href="javascript: void(0);" class="order-by active-order" onclick="orderByActivities(this, 'asc');">&darr;</a></div>
+				  <input type="hidden" id="filter_order_by" name="filter_order_by" value="<?php echo $pflt_filter["filter_order_by"]; ?>">
+				</td>
+				<td style="text-align: right;">
+						<input type="button" name="button_filter" value="Филтър" class="submit_button button_add" onclick="pflt_activities_filter_new();">
+						<input type="button" name="button_clear" value="X" class="submit_button button_delete" onclick="pflt_clear_filter('<?php echo $route; ?>');">
+				</td>
+			</tr>
+                        <tr>
+                            <td>
+                               Период
+                            </td>
+                            <td>
+                                <select id="filter_activity_period" name="filter_activity_period"  class="ie180">
+                                    <option value="*" <?php echo $pflt_filter["filter_activity_period"] == "*"?" selected":""; ?>>-- Избери период --</option>
+                                    <option value="this_week" <?php echo $pflt_filter["filter_activity_period"] == "this_week"?" selected":""; ?>>Тази седмица</option>
+                                    <option value="this_and_last_week" <?php echo $pflt_filter["filter_activity_period"] == "this_and_last_week"?" selected":""; ?>>Тази и миналата седмица</option>
+                                    <option value="this_month" <?php echo $pflt_filter["filter_activity_period"] == "this_month"?" selected":""; ?>>Този месец</option>
+                                    <option value="this_and_last_month" <?php echo $pflt_filter["filter_activity_period"] == "this_and_last_month"?" selected":""; ?>>Този и минали месец</option>
+                                    <option value="this_year" <?php echo $pflt_filter["filter_activity_period"] == "this_year"?" selected":""; ?>>Тази година</option>
+                                </select>
+                            </td>
+                            <td>Потребител</td>
+                            <td colspan="6"><?php echo userSelect("filter_uid", "filter_uid", $pflt_filter["filter_uid"], "", true) ; ?></td>
+                        </tr>
+		</table>
+  <script type="text/javascript">
+  	$(document).ready(function(){
+  		if ($('input[name=\'filter_doc_num\']').val() != '') {
+				$('input[name=\'filter_doc_num\']').css({'border':'1px red solid'});
+			}
+  	
+  		if ($('select[name=\'filter_card_status\'] option:selected').val() != '*') {
+				$('select[name=\'filter_card_status\']').css({'border':'1px red solid'});
+			}
+
+  		if ($('select[name=\'filter_activity_date\'] option:selected').val() != '*') {
+				$('select[name=\'filter_activity_date\']').css({'border':'1px red solid'});
+			}
+		});
+  		if ($('select[name=\'filter_activity_period\'] option:selected').val() != '*') {
+				$('select[name=\'filter_activity_period\']').css({'border':'1px red solid'});
+			}
+		});
+  		if ($('select[name=\'filter_uid\'] option:selected').val() != '*') {
+				$('select[name=\'filter_uid\']').css({'border':'1px red solid'});
+			}
+		});
+		
+		function orderByActivities(el, order) {
+      $('.order-by').removeClass('active-order');
+      $(el).addClass('active-order');
+      $('input[name=\'filter_order_by\']').val(order);
+      pflt_activities_filter();
+    }
+	</script>	
+	</div>
+
+<table width="100%" class="list" border="1" cellspacing="0" cellpadding="1">
+	<colgroup>
+		<col width="30">
+		<col width="100">
+		<col width="160">
+		<col width="80">
+		<col width="120">
+		<col width="160">
+		<col width="180">
+		<col width="160">
+		<col width="60">
+		<col width="60">
+	</colgroup>
+	<tr>	
+		<th><input type="checkbox"></th>
+		<th>No Поръчка</th>
+		<th>Клиент</th>
+		<th>Статус</th>
+		<th>За дата</th>
+		<th>Потребител</th>
+		<th>Опсиание</th>
+		<th>Контрагент</th>
+		<th>Сума</th>
+		<th>Действие</th>
+	</tr>
+	<?php if (count($activities)) { ?>
+	<?php foreach ($activities as $key => $item) { 
+
+	$doc_class = "";
+	switch($item["doc_status"]) {
+		case DOC_ORDER_STATUS_E:
+			$doc_class = "mark-red";
+			break;
+		case DOC_ORDER_STATUS_A:
+			$doc_class = "mark-green";
+			break;
+		case DOC_ORDER_STATUS_R:
+			$doc_class = "mark-blue";
+			break;
+		case DOC_ORDER_STATUS_N:
+			default:
+			$doc_class = "mark-gray";
+			break;
+	}
+	?>
+	<?php if (count($item["ITEM_A"])) { ?>
+	<!--
+		<tr>	
+			<td align="center"><input type="checkbox"></td>
+			<td colspan=9><b>Дейности</b></td>
+		</tr>	
+		-->
+	<?php 
+	foreach ($item["ITEM_A"] as $k => $v) { 
+	$v["card_status"] = $v["card_status"]?CARD_STATUS_F:CARD_STATUS_W;
+	?>
+		<tr<?php echo (isForgotten($v) ? ' class="mark-as-forgotten"':''); ?>>	
+			<td align="center"><input type="checkbox"></td>
+			<td><?php echo _fnes($v["doc_num"]); ?></td>
+			<td><?php echo _fnes($v["client"]); ?></td>
+			<td align="center"><?php echo _fnes($GLOBALS["CARD_STATUS"][$v["status"]]); ?></td>
+			<td align="center"><?php echo _fnes($v["activity_date"]); ?></td>
+			<td><?php echo _fnes($v["user_fullname"]); ?></td>
+			<td><?php echo _fnes(htmlspecialchars($v["note"])); ?></td>
+			<td>-</td>
+			<td>-</td>
+			<td width="60" class="action"><a class="sadd" href="<?php echo $action_edit.$v['doc_id'].get_filter(); ?>"></a></td>
+		</tr>	
+	<?php } ?>
+	<?php } ?>
+	<?php if (count($item["ITEM_C"])) {?>
+	<!--
+		<tr>	
+			<td align="center"><input type="checkbox"></td>
+			<td colspan=9><b>Контрагенти</b></td>
+		</tr>		
+		-->
+	<?php } ?>
+	
+	<?php foreach ($item["ITEM_C"] as $k => $v) { 
+		$v["status"] = $v["status"]?CARD_STATUS_F:CARD_STATUS_W;
+	?>
+		<tr<?php echo (isForgotten($v) ? ' class="mark-as-forgotten"':''); ?>>	
+			<td align="center"><input type="checkbox"></td>
+			<td><?php echo _fnes($v["doc_num"]); ?></td>
+			<td><?php echo _fnes($v["client"]); ?></td>
+			<td align="center"><?php echo _fnes($GLOBALS["CARD_STATUS"][$v["status"]]); ?></td>
+			<td align="center"<?php echo ($isForget? ' style="background: red;"':''); ?>><?php echo _fnes($v["activity_date"]); ?></td>
+			<td><?php echo _fnes($v["user_fullname"]); ?></td>
+			<td><?php echo _fnes(htmlspecialchars($v["note"])); ?></td>
+			<td><?php echo _fnes($v["supplier_fullname"]); ?></td>
+			<td align="right"><?php echo _fnes($v["supplier_sum"]); ?></td>
+			<td width="60" class="action"><a class="sadd" href="<?php echo $action_edit.$v['doc_id'].get_filter(); ?>"></a></td>
+		</tr>	
+	<?php } ?>
+	
+	<?php } ?>
+	<?php } ?>
+</table>
+<div id="container">
+<?php echo $styles; ?>
+
+</div>
+

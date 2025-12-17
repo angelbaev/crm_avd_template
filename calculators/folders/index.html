@@ -1,0 +1,1561 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+
+  <head>
+
+  	<meta http-equiv="content-type" content="text/html; charset=windows-1251">
+
+    <script src="js/jquery-1.6.1.min.js"  type="text/javascript"></script>
+
+    <script src="js/calc-object.js" type="text/javascript"></script>
+
+    
+
+    <style>
+
+      /* base style */
+
+@media screen
+
+{      
+
+      body, select { 
+
+				font-family: Verdana, Tahoma, Helvetica, Arial;
+
+				font-size: 10px;
+
+			}
+
+ 
+
+ .select, .input {
+
+	background: url('images/input_bg.png') repeat-x;
+
+	border: 1px solid #e7e7e7;
+
+	padding: 3px;
+
+	color: #676767;
+
+	font-size: 11px;
+
+	-moz-border-radius: 3px;
+
+	-webkit-border-radius: 3px;
+
+	border-radius: 3px;
+
+}
+
+input.num{
+
+	text-align: right;
+
+}
+
+
+
+
+
+
+
+
+
+.select option {
+
+	background: #f9f9f9;
+
+/*	text-align: center;*/
+
+}
+
+.button{
+
+/*	background: url('images/submit_btn_bg.png') repeat-x;*/
+
+	background-color: #f67c17;
+
+	height: 25px;
+
+	border: 1px solid #666;/*#237793*/
+
+	color: #fff;
+
+	font-weight: bold;
+
+	font-size: 12px;
+
+	padding: 0 1px;
+
+	cursor: pointer;
+
+	-moz-border-radius: 6px;
+
+	-webkit-border-radius: 6px;
+
+	border-radius: 6px;
+
+
+
+}
+
+	
+
+.clac_logo {
+
+	position: absolute;
+
+	margin: -10px 0px 0px 10px;
+
+}				
+
+      fieldset{
+
+				border: 1px solid #cccccc;
+
+				width: 200px; 
+
+				text-align: left;
+
+				background: #ffffff url(images/bg_two.png) repeat-x;
+
+				padding: 2px;
+
+			}
+
+			legend {
+
+				font-size: 14px;
+
+				border: 1px solid #cccccc;
+
+				background-color: #eeeeee;
+
+				color: #66666;
+
+				font-weight: bold;
+
+			/*	padding: 3px 10px 3px 15px;*/
+
+			padding: 2px 10px 2px 15px;
+
+				margin-left: 10px;
+
+				border-top-left-radius: 3px; 	
+
+				-moz-border-radius-topleft: 3px;
+
+				-webkit-border-top-left-radius: 3px;
+
+				/*
+
+	-moz-border-radius: 3px;
+
+	-webkit-border-radius: 3px;
+
+	border-radius: 3px;
+
+	*/
+
+			}
+
+#calc_logo_header{
+
+				font-size: 14px;
+
+				border: 1px solid #cccccc;
+
+				background-color: #eeeeee;
+
+				color: #66666;
+
+				font-weight: bold;
+
+				width: 90px;
+
+				text-align: right;
+
+				padding-right: 5px;
+
+				padding-bottom: 3px;
+
+				/*
+
+				border-top-left-radius: 3px; 	
+
+				-moz-border-radius-topleft: 3px;
+
+				-webkit-border-top-left-radius: 3px;
+
+				*/
+
+	-moz-border-radius: 3px;
+
+	-webkit-border-radius: 3px;
+
+	border-radius: 3px;
+
+				
+
+				position: absolute;
+
+				margin: -15px 0px 0px 10px;
+
+}
+
+			
+
+.calc_title{
+
+	color: #666;
+
+	text-align: center;
+
+	font-weight: bold;
+
+	font-size: 1.4em;
+
+}
+
+.label {
+
+	color: #666;
+
+	font-weight: bold;
+
+}
+
+.label_title{
+
+	padding-left: 15px;
+
+	text-align: left;
+
+}
+
+
+
+	 .sum_num {
+
+		color: #666;
+
+	 
+
+	 	font-weight: bold;
+
+	 	text-align: right;
+
+	 }
+
+			
+
+   .ie60{
+
+	 	width: 60px;
+
+	 }
+
+   .ie80{
+
+	 	width: 80px;
+
+	 }
+
+   .ie120{
+
+	 	width: 120px;
+
+	 }
+
+   .ie140{
+
+	 	width: 140px;
+
+	 }
+
+   .ie160{
+
+	 	width: 160px;
+
+	 }
+
+   .ie180{
+
+	 	width: 180px;
+
+	 }
+
+	 
+
+/* Calc msg begin */
+
+div#msg_log{
+
+	top: 25%;
+
+	left: 32%;
+
+	position: absolute;
+
+
+
+}
+
+div.msg_dialog{
+
+	border: 1px solid;
+
+	width: 450px;
+
+	padding: 10px;
+
+	left: 32%;
+
+	margin-bottom: 5px;
+
+}
+
+div.close_msg{
+
+	color: #000;
+
+	font-weight: bold;
+
+	font-size: 8px;
+
+	text-align: right;
+
+	float: right;
+
+	cursor: pointer;
+
+}
+
+div.msg_content{
+
+	font-size: 12px;
+
+}
+
+.info {
+
+.color: #00529B;
+
+background-color: #BDE5F8;
+
+}
+
+.success {
+
+.color: #4F8A10;
+
+background-color: #DFF2BF;
+
+}
+
+.warning {
+
+color: #9F6000;
+
+background-color: #FEEFB3;
+
+}
+
+.error {
+
+color: #D8000C;
+
+background-color: #FFBABA;
+
+}
+
+
+
+
+
+}
+
+
+
+/* popup begin */
+
+/*Calc msg end */	 
+
+    </style>
+
+    <script type="text/javascript">
+
+     	var MSG_ERROR = '1';
+
+    	var MSG_WARNING = '2';
+
+    	var MSG_INFO = '3';
+
+    	var MSG_SUCCESS = '4';
+
+		var URL_PARAMS = getUrlVars();
+
+			var global_params = null;
+
+
+
+			$(document).ready(function(){
+
+				//Clear Calc Form begin 
+
+			  $('#paper_reset').click(function(){
+
+			  		clear_error_log();
+
+				    $('#calc_form').find(':input').each(function() {
+
+				        switch(this.type) {
+
+				            case 'password':
+
+				            case 'select-multiple':
+
+				            case 'select-one':
+
+				            case 'text':
+
+				            case 'textarea':
+
+				                $(this).val('');
+
+				                break;
+
+				            case 'checkbox':
+
+				            case 'radio':
+
+				                this.checked = false;
+
+				        }
+
+				    });	
+
+					  	return false;
+
+			  });
+
+				
+
+				//Clear Calc Form end			
+
+				
+
+				//Calc Action Begin 
+
+			$('#paper_calc').click(function(){
+
+				clear_error_log();
+
+				var paper_cnt = $('#paper_cnt').val();
+
+        var min_qty = 100;
+
+        var paper_kind_selected = parseInt($('#paper_kind option:selected').val());
+
+        
+
+        if (paper_kind_selected == 1 || paper_kind_selected == 2) { // || paper_kind_selected !== 2
+
+          min_qty = 100;
+
+        } else {
+
+          min_qty = 1;
+
+        }
+
+				if (paper_cnt == '') {
+
+					add_msg('В полето (брой) не е въведена стойност!',MSG_ERROR);
+
+					return false;
+
+				} else if (isNaN(parseInt(paper_cnt))) {
+
+					add_msg('В полето (брой) може да съдържа само цифри!',MSG_ERROR);
+
+					return false;
+
+				} else if (paper_cnt < min_qty ) {
+
+					add_msg('Минималното количесто за изпълнение е '+min_qty+' броя!',MSG_ERROR);
+
+					return false;
+
+				} else if(paper_cnt > 16000){
+
+					add_msg('За количество над 16000 броя, моля обадете се на тел. (02) 490 49 49!',MSG_INFO);
+
+					return false;
+
+				} else {
+
+        
+
+					if ($('#paper_prege option:selected').val() == 0 && $('#paper_cliche option:selected').val() != 0) {
+
+						add_msg('Не се избира КЛИШЕ, ако не е избрана опция ПРЕГЕ! За повече информация, моля свържете се с нас на тел: 02 490 49 49!',MSG_ERROR);
+
+						return false;
+
+					}
+
+
+
+					var P_TYPE = Math.ceil(paper_cnt/parseInt(A_format_type[$('#paper_kind option:selected').val()]['N']));
+
+					var FM  = '';
+
+					
+
+					if ($('#paper_print_face option:selected').val() != 4) {
+
+						FM  = '';
+
+					} else {
+
+							if ($('#paper_kind option:selected').val() == 4 || $('#paper_kind option:selected').val() == 5) {
+
+								if ($('#paper_print_face option:selected').val() == 4 && $('#paper_print_back option:selected').val() == 0 && paper_cnt < 200) {
+
+									FM  = 'FM1: цена за печат = (0.8*(5+P)); P= '+P_TYPE+'; | цена за печат = '+(0.8*(5+P_TYPE))+'';
+
+								}
+
+								if ($('#paper_print_face option:selected').val() == 4 && $('#paper_print_back option:selected').val() != 0 && paper_cnt < 200) {
+
+									FM  = 'FM2: цена за печат = (1.6*(5+P)); P= '+P_TYPE+'; | цена за печат = '+(1.6*(5+P_TYPE))+'';
+
+								}
+
+							} else if ($('#paper_kind option:selected').val() == 6) {
+
+									if ($('#paper_print_face option:selected').val() == 4 &&$('#paper_print_back option:selected').val() == 0 && paper_cnt < 300) {
+
+										FM  = 'FM1: цена за печат = (0.8*(5+P)); P= '+P_TYPE+'; | цена за печат = '+(0.8*(5+P_TYPE))+'';
+
+									}
+
+									if ($('#paper_print_face option:selected').val() == 4 &&$('#paper_print_back option:selected').val() != 0 && paper_cnt < 300) {
+
+										FM  = 'FM2: цена за печат = (1.6*(5+P)); P= '+P_TYPE+'; | цена за печат = '+(1.6*(5+P_TYPE))+'';
+
+									}
+
+							
+
+							}
+
+					}
+
+
+
+					TYPE_P = 1;
+
+					//Math.ceil(parseFloat($('#paper_size option:selected').val())/(parseFloat($('#paper_paper_list option:selected').val())*paper_cnt));
+
+					if(P_TYPE > 0 &&  P_TYPE <= 1000) {
+
+						TYPE_P = 1;
+
+					} else if (P_TYPE >= 1001 &&  P_TYPE <= 2000) {
+
+						TYPE_P = 2;
+
+					} else if (P_TYPE >= 2001 &&  P_TYPE <= 3000) {
+
+						TYPE_P = 3;
+
+					}  else if (P_TYPE >= 3001 &&  P_TYPE <= 4000) {
+
+						TYPE_P = 4;
+
+					}   else if (P_TYPE >= 4001 &&  P_TYPE <= 5000) {
+
+						TYPE_P = 5;
+
+					}   else if (P_TYPE >= 5001 &&  P_TYPE <= 6000) {
+
+						TYPE_P = 6;
+
+					}    else if (P_TYPE >= 6001 &&  P_TYPE <= 7000) {
+
+						TYPE_P = 7;
+
+					}    else if (P_TYPE >= 7001 &&  P_TYPE <= 8000) {
+
+						TYPE_P = 8;
+
+					}    else if (P_TYPE >= 8001 &&  P_TYPE <= 9000) {
+
+						TYPE_P = 9;
+
+					}    else if (P_TYPE >= 9001 &&  P_TYPE <= 10000) {
+
+						TYPE_P = 10;
+
+					}    else if (P_TYPE >= 10001 &&  P_TYPE <= 11000) {
+
+						TYPE_P = 11;
+
+					}    else if (P_TYPE >= 11001 &&  P_TYPE <= 12000) {
+
+						TYPE_P = 12;
+
+					}    else if (P_TYPE >= 12001 &&  P_TYPE <= 13000) {
+
+						TYPE_P = 13;
+
+					}    else if (P_TYPE >= 13001 &&  P_TYPE <= 14000) {
+
+						TYPE_P = 14;
+
+					}    else if (P_TYPE >= 14001 &&  P_TYPE <= 15000) {
+
+						TYPE_P = 15;
+
+					}    else {
+
+						TYPE_P = 16;
+
+					}
+
+
+
+					TYPE_K = 1;
+
+					if(paper_cnt > 20 &&  paper_cnt <= 49) {
+
+						TYPE_K = 1;
+
+					} else if (paper_cnt >= 50 &&  paper_cnt <= 99) {
+
+						TYPE_K = 2;
+
+					} else if (paper_cnt >= 100 &&  paper_cnt <= 199) {
+
+						TYPE_K = 3;
+
+					}  else if (paper_cnt >= 200 &&  paper_cnt <= 299) {
+
+						TYPE_K = 4;
+
+					}   else if (paper_cnt >= 300 &&  paper_cnt <= 499) {
+
+						TYPE_K = 5;
+
+					}   else if (paper_cnt >= 500 &&  paper_cnt <= 999) {
+
+						TYPE_K = 6;
+
+					}    else if (paper_cnt >= 1000 &&  paper_cnt <= 1999) {
+
+						TYPE_K = 7;
+
+					}    else if (paper_cnt >= 2000 &&  paper_cnt <= 4999) {
+
+						TYPE_K = 8;
+
+					}    else if (paper_cnt >= 5000 &&  paper_cnt <= 9000) {
+
+						TYPE_K = 9;
+
+					} 
+
+			
+
+					TYPE_W = 1;
+
+					if(P_TYPE > 0 &&  P_TYPE <= 200) {
+
+						TYPE_W = 1;
+
+					} else if (P_TYPE >= 201 &&  P_TYPE <= 500) {
+
+						TYPE_W = 2;
+
+					} else if (P_TYPE >= 501 &&  P_TYPE <= 1001) {
+
+						TYPE_W = 3;
+
+					} else {
+
+						TYPE_W = 4;
+
+					} 
+
+					
+
+					var get_M = A_format_type[$('#paper_kind option:selected').val()]['M'];
+
+					
+
+					if ($('#paper_kind option:selected').val() == 3 || $('#paper_kind option:selected').val() == 4) {
+
+							var Q = paper_cnt*0.36;
+
+					} else if ($('#paper_kind option:selected').val() == 6) {
+
+							var Q = paper_cnt*0.3;
+
+					} else {
+
+						var Q = parseFloat(W_format_type[5][get_M])+(parseFloat(P_TYPE)*parseFloat(W_format_type[TYPE_W][get_M]));
+
+					}
+
+					var params = {
+
+						'A':parseFloat($('#paper_kind option:selected').val())
+
+						, 'B':parseFloat($('#paper_print_face option:selected').val())
+
+						, 'C':parseFloat($('#paper_print_back option:selected').val()) //
+
+						, 'D':parseFloat($('#paper_print option:selected').val())//
+
+						, 'E':parseFloat($('#paper_paper_type option:selected').val())//
+
+						, 'F':parseFloat(F_format_type[$('#paper_cover option:selected').val()][get_M])//
+
+						, 'G':parseFloat(($('#paper_prege option:selected').val()!= 0?K_format_type[TYPE_K][$('#paper_prege option:selected').val()]:0))//
+
+						, 'N':parseFloat(A_format_type[$('#paper_kind option:selected').val()]['N'])
+
+						, 'O':parseFloat(A_format_type[$('#paper_kind option:selected').val()]['O'])
+
+						, 'P':parseFloat(P_TYPE)
+
+						, 'S':parseFloat(W_format_type[5][get_M])
+
+						, 'T':parseFloat(P_format_type[TYPE_P][get_M])
+
+						, 'R':parseFloat(R_format_type[$('#paper_print_face option:selected').val()])
+
+						, 'H':parseFloat($('#paper_cliche option:selected').val())
+
+						, 'X':parseFloat(F_format_type[$('#paper_cover option:selected').val()]['X'])
+
+						, 'W':parseFloat(W_format_type[TYPE_W][get_M])
+
+						, 'K':parseFloat(paper_cnt)
+
+						, 'Q':parseFloat(Q)
+
+
+
+						, 'FM':''+FM+''
+
+
+
+						, 'U':parseFloat($('#paper_file option:selected').val())
+
+						, 'Z':parseFloat($('#paper_discount option:selected').val())
+
+					}
+
+
+
+					var _html = 
+
+							'A: '+params['A']+'<br>'+
+
+							'B: '+params['B']+'<br>'+
+
+							'C: '+params['C']+'<br>'+
+
+							'D: '+params['D']+'<br>'+
+
+							'E: '+params['E']+'<br>'+
+
+							'F: '+params['F']+'<br>'+
+
+							'G: '+params['G']+'<br>'+
+
+							'N: '+params['N']+'<br>'+
+
+							'O: '+params['O']+'<br>'+
+
+							'P: '+params['P']+'<br>'+
+
+							'S: '+params['S']+'<br>'+
+
+							'T: '+params['T']+'<br>'+
+
+							'R: '+params['R']+'<br>'+
+
+							'H: '+params['H']+'<br>'+
+
+							'X: '+params['X']+'<br>'+
+
+							'W: '+params['W']+'<br>'+
+
+							'K: '+params['K']+'<br>'+
+
+							'Q: '+params['Q']+'<br>'+
+
+
+
+							'FM: '+params['FM']+'<br>'+
+
+							'P_TYPE: '+P_TYPE+'<br>'+
+
+							
+
+							'U: '+params['U']+'<br>'+
+
+							'Z: '+params['Z']+'<br>';
+
+
+
+						global_params = params;
+
+				//	add_msg(_html ,MSG_SUCCESS);
+
+					build_calculator(params);
+
+					return false;
+
+        
+
+        
+
+        }
+
+
+
+
+
+				
+
+			});		  
+
+				
+
+				//Calc Action edn
+
+			$('#paper_export').click(function(){
+
+			//	add_msg('Действието е забранено!',MSG_ERROR);
+
+			//	return false;
+
+				openPrintWindow();
+
+				return false;
+
+			
+
+			});
+
+			
+
+			});
+
+			
+
+			function add_msg(msg, type) {
+
+					parent.msg_add(msg, type);
+
+			}
+
+			function clear_error_log() {
+
+				$('div#msg_log').html('');
+
+				parent.document.getElementById('msg_wrapp').innerHTML = '';
+
+				
+
+				$('#single_sum').html('0,00 лв/бр');
+
+				$('#sum_total').html('0,00 лв');
+
+				$('#sum_vat_total').html('0,00 лв');
+
+			
+
+			}
+
+			function hide_msg(div) {
+
+				$(div).parent().fadeOut();
+
+			}
+
+			
+
+			function openPrintWindow() {
+
+				//765,600
+
+				if (global_params != null) {
+
+
+
+					total_print_price = (((global_params['B']+global_params['C'])*global_params['T'])+global_params['D']);
+
+					total_paper_price = (((global_params['P']+global_params['R'])/global_params['O'])*global_params['E']);
+
+					total_cover_price = ((global_params['P']*global_params['F'])+global_params['X']);
+
+					total_work_price = (((global_params['K']*global_params['G'])+global_params['H'])+global_params['Q']);
+
+					total_pprint_price = global_params['U'];
+
+				
+
+//alert(total_print_price+'s z: '+(global_params['Z']));
+
+
+
+					total_print_price = roundNumber((total_print_price*global_params['Z']), 2)+' лв';
+
+					total_paper_price = roundNumber((total_paper_price*global_params['Z']), 2)+' лв';
+
+					total_work_price = roundNumber((total_work_price*global_params['Z']), 2)+' лв';
+
+					total_cover_price = roundNumber((total_cover_price*global_params['Z']), 2)+' лв';
+
+					total_pprint_price = roundNumber(total_pprint_price, 2)+' лв';
+
+
+
+/*
+
+					total_print_price = roundNumber((total_print_price), 2)+' лв';
+
+					total_paper_price = roundNumber((total_paper_price), 2)+' лв';
+
+					total_work_price = roundNumber((total_work_price), 2)+' лв';
+
+					total_cover_price = roundNumber((total_cover_price), 2)+' лв';
+
+					total_pprint_price = roundNumber(total_pprint_price, 2)+' лв';
+
+*/
+
+					var url = 
+
+						'print.php?'+
+
+						'kind='+escape($('#paper_kind option:selected').text())+
+
+						'&print_face='+escape($('#paper_print_face option:selected').text())+
+
+						'&print_back='+escape($('#paper_print_back option:selected').text())+
+
+						'&paper_print='+escape($('#paper_print option:selected').text())+
+
+						'&paper_type='+escape($('#paper_paper_type option:selected').text())+
+
+						'&cover='+escape($('#paper_cover option:selected').text())+
+
+						'&prege='+escape($('#paper_prege option:selected').text())+
+
+						'&cliche='+escape($('#paper_cliche option:selected').text())+
+
+						'&file='+escape($('#paper_file option:selected').text())+
+
+						'&cnt='+escape($('#paper_cnt').val())+
+
+
+
+						'&total_print_price='+escape(total_print_price)+
+
+						'&total_paper_price='+escape(total_paper_price)+
+
+						'&total_work_price='+escape(total_work_price)+
+
+						'&total_cover='+escape(total_cover_price)+
+
+						'&total_pprint='+escape(total_pprint_price)+
+
+
+
+						
+
+						'&sum='+escape($('#single_sum').html())+
+
+						'&total='+escape($('#sum_total').html())+
+
+						'&vat='+escape($('#sum_vat_total').html());
+
+
+
+					var w_l = window.location.href;
+
+					w_l = w_l.toString();
+
+					w_l = w_l.replace('index.html?opt_id='+URL_PARAMS['opt_id'],''); 
+
+					
+
+					var params = {'act':'save','calc_params':''+w_l+url+'','image_id':URL_PARAMS['opt_id']};
+
+					$.ajax({
+
+						type : 'POST',
+
+						url : '../../ajax/calculator-ajax.php',
+
+						dataType : 'html',
+
+						cache: false,
+
+						data: params,
+
+						success : function(data){
+
+					    //$('div#ajax_box').html('');
+
+							add_msg('Калкулатора е експортиран успешно!', MSG_SUCCESS);
+
+							parent.document.getElementById('c_export_view_'+URL_PARAMS['opt_id']).innerHTML = data;
+
+							parent.document.getElementById('c_export_'+URL_PARAMS['opt_id']).value = data;
+
+						
+
+						},
+
+						error : function(XMLHttpRequest, textStatus, errorThrown) {
+
+					    add_msg('Error: '+errorThrown, MSG_ERROR);
+
+						}
+
+					});
+
+
+
+
+
+				} else {
+
+					add_msg('Изберете (<b>изчисли</b>) преди експорт!',MSG_INFO);
+
+					return false;
+
+				}
+
+				
+
+			}
+
+
+
+		function getUrlVars(){
+
+		    var vars = [], hash;
+
+		    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+		    for(var i = 0; i < hashes.length; i++)
+
+		    {
+
+		        hash = hashes[i].split('=');
+
+		        vars.push(hash[0]);
+
+		        vars[hash[0]] = unescape(hash[1]);
+
+		    }
+
+		    return vars;
+
+		}	
+
+			
+
+    </script>
+
+  </head>
+
+  <body>
+
+ <center>
+
+<div id="invoice_calc"> 
+
+<br>
+
+<fieldset>
+
+	<form id="calc_form"> 
+
+
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+	<colgroup>
+
+		<col width="100">
+
+		<col width="100">
+
+	</colgroup>
+
+ 	<tr>
+
+ 		<td colspan="2">
+
+			<div id="calc_logo_header" title="Папки">
+
+						<div class="clac_logo">
+
+						<img src="images/calc_logo.png" alt="" title="Папки">
+
+						</div>
+
+			Папки
+
+			</div>
+
+		</td>
+
+ 	</tr>
+
+ 	
+
+ 	<tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 вид
+
+ 		</div>
+
+		<select id="paper_kind" name="paper_kind" class="select ie180">
+
+			<option value="1">	А4 с обемен щанцован джоб	</option>
+
+			<option value="2">	А4 с необемен щанцован джоб	</option>
+
+			<option value="3">	А4 с обемен лепен джоб	</option>
+
+			<option value="4">	А4 с необемен лепен джоб	</option>
+
+			<option value="5">	А5 с необемен щанцован джоб	</option>
+
+			<option value="6">	А5 с необемен лепен джоб	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+ 	<tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 печат лице
+
+ 		</div>
+
+		<select id="paper_print_face" name="paper_print_face" class="select ie180">
+
+			<option value="1">	1 цвят	</option>
+
+			<option value="2">	2 цвята	</option>
+
+			<option value="3">	3 цвята	</option>
+
+			<option value="4">	пълноцветно	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+  <tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 печат гръб
+
+ 		</div>
+
+		<select id="paper_print_back" name="paper_print_back" class="select ie180">
+
+			<option value="0">	не	</option>
+
+			<option value="1">	1 цвят	</option>
+
+			<option value="2">	2 цвята	</option>
+
+			<option value="3">	3 цвята	</option>
+
+			<option value="4">	пълноцветно	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+  <tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 вид печат
+
+ 		</div>
+
+		<select id="paper_print" name="paper_print" class="select ie180">
+
+			<option value="0">	CMYK	</option>
+
+			<option value="25">	1 Pantone	</option>
+
+			<option value="50">	2 Pantone	</option>
+
+			<option value="75">	3 Pantone	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+
+
+  <tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 хартия
+
+ 		</div>
+
+		<select id="paper_paper_type" name="paper_paper_type" class="select ie180">
+
+			<option value="0.52">	двустранен хром 250 гр./кв.м	</option>
+
+			<option value="0.64">	двустранен хром 300 гр./кв.м	</option>
+
+			<option value="0.85">	двустранен хром 350 гр./кв.м	</option>
+
+			<option value="0.91">	опаковъчен картон 260 гр./кв.м	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+
+
+  <tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 покритие
+
+ 		</div>
+
+		<select id="paper_cover" name="paper_cover" class="select ie180">
+
+			<option value="0">	няма	</option>
+
+			<option value="1">	едностранен UV лак ГЛАНЦ	</option>
+
+			<option value="2">	едностранен UV лак МАТ	</option>
+
+			<option value="3">	двустранен UV лак ГЛАНЦ	</option>
+
+			<option value="4">	двустранен UV лак МАТ	</option>
+
+			<option value="5">	едностранен МАТ ламинат	</option>
+
+			<option value="6">	едностранен ГЛАНЦ ламинат	</option>
+
+			<option value="7">	двустранен МАТ ламинат	</option>
+
+			<option value="8">	двустранен ГЛАНЦ ламинат	</option>
+
+			<option value="9">	едностранен МАТ ламинат и частичен UV лак	</option>
+
+			<option value="10">	двустранен МАТ ламинат и частичен UV лак	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+
+
+  <tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 преге
+
+ 		</div>
+
+		<select id="paper_prege" name="paper_prege" class="select ie180">
+
+			<option value="0">	няма	</option>
+
+			<option value="1">	сухо преге	</option>
+
+			<option value="2">	голд печат	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+
+
+  <tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 магнезиево клише
+
+ 		</div>
+
+		<select id="paper_cliche" name="paper_cliche" class="select ie180">
+
+			<option value="0">	няма	</option>
+
+			<option value="20">	налично	</option>
+
+			<option value="70">	изработка до 80 кв.см	</option>
+
+			<option value="110">	изработка до 150 кв.см	</option>
+
+			<option value="160">	изработка до 200 кв.см	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+
+
+ 	<tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 файл
+
+ 		</div>
+
+		<select id="paper_file" name="paper_file" class="select ie180">
+
+			<option value="10">	готов файл за печат	</option>
+
+			<option value="60">	предпечат по идеен проект	</option>
+
+			<option value="120">	дизайн и проект	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+ 	<tr style="text-align:left;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 брой
+
+		 </div>
+
+
+
+ 		&nbsp;&nbsp;&nbsp;<input type="text" id="paper_cnt" name="paper_cnt" class="input ie60 num" value=""></td>
+
+ 	</tr>
+
+  <tr style="text-align:center;">
+
+ 		<td colspan="2" class="label">
+
+		 <br>
+
+		 <div class="label_title">
+
+		 отстъпка
+
+ 		</div>
+
+		<select id="paper_discount" name="paper_discount" class="select ie180">
+
+			<option value="1.33">	няма	</option>
+
+			<option value="1.23">	корпоративен клиент	</option>
+
+		</select>
+
+		</td>
+
+ 	</tr>
+
+ 	<tr>
+
+ 		<td colspan="2" style="text-align:center;">&nbsp;<hr></td>
+
+ 	</tr>
+
+	<tr>
+
+		<td colspan="2">
+
+		<table style="border-collapse: collapse; border:1px #ccc solid;" width="100%" border="0" cellspacing="0" cellpadding="2">
+
+	<colgroup>
+
+		<col width="115">
+
+		<col width="85">
+
+	</colgroup>
+
+		 	<tr style="background-color: #f67c17; color:#fff;" class="sum_num">
+
+		 		<td>ед.цена без ДДС:</td>
+
+		 		<td id="single_sum">0,00 лв/бр</td>
+
+		 	</tr>
+
+		 	<tr style="background-color: #f67c17; color:#fff;"  class="sum_num">
+
+		 		<td>общо без ДДС:</td>
+
+		 		<td id="sum_total">0,00 лв</td>
+
+		 	</tr>
+
+		 	<tr style="background-color: #f67c17; color:#fff;"  class="sum_num">
+
+		 		<td>ТОТАЛ:</td>
+
+		 		<td id="sum_vat_total">0,00 лв</td>
+
+		 	</tr>
+
+		</table>
+
+		<br>
+
+	</tr>
+
+	</td>
+
+ 	<tr>
+
+ 		<td colspan="2" style="text-align:center;">&nbsp;</td>
+
+ 	</tr>
+
+ 	<tr>
+
+ 		<td colspan="2" style="text-align:center;">
+
+		 <input type="image" id="paper_calc" value="" src="images/btn_calc.png">
+
+		 <input type="image" id="paper_reset" value="" src="images/btn_clear.png">
+
+		 <input type="image" id="paper_export" value="" src="images/btn_export.png">
+
+   
+
+		 </td>
+
+ 	</tr>
+
+
+
+</table>
+
+
+
+
+
+	</form>
+
+</fieldset>
+
+</div>
+
+</center> 
+
+	<div id="msg_log">
+
+
+
+	
+
+	</div>
+
+
+
+
+
+	
+
+
+
+  </body>
+
+</html>

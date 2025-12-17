@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1251">
+  <meta name="generator" content="PSPad editor, www.pspad.com">
+  <title></title>
+    <script src="js/jquery-1.6.1.min.js"  type="text/javascript"></script>
+  
+  <style>
+@media screen{
+	body{
+		margin: 0 0 0 0;
+		padding: 0 0 0 0;
+		font-family: Verdana, Tahoma, Helvetica, Arial;
+		font-size: 8px;
+	}
+	p, ul{
+		font-family: Verdana, Tahoma, Helvetica, Arial;
+		font-size: 12px;
+	}
+	div#nav_bar{
+		background-color: #eee;
+		height: 40px;
+		border-bottom: 2px #ccc solid;
+		margin-bottom: 10px;
+	}
+	#nav_btns {
+		float: right;
+		list-style: none;
+		margin: 0 0 0 0;
+		padding: 0 0 0 0;
+	}
+	#nav_btns li {
+	float: right;
+	margin: 2px 8px 0px 0px;
+	
+	
+	}
+.closePrint{
+	position: absolute;
+}
+
+#print_div_content{		
+	width:99%;/*210mm*/
+/*	height: 29cm;*/
+	/*border: 1px #666 solid;*/
+} 		
+
+}  
+@media print
+{
+      body{ 
+		margin: 0 0 0 0;
+		padding: 0 0 0 0;
+		font-family: Verdana, Tahoma, Helvetica, Arial;
+		font-size: 8px;
+			}
+			div#nav_bar {
+				display:none;
+			}
+
+	p, ul{
+		font-family: Verdana, Tahoma, Helvetica, Arial;
+		font-size: 12px;
+	}
+			
+#print_div_content{		
+	width:99%;/*210mm*/
+	/*height: 29cm;*/
+	/*border: 1px #666 solid;*/
+} 		
+}  
+  </style>
+	<script language="javascript">
+		$(document).ready(function(){
+			var url_params = getUrlVars();
+
+
+			$('#print_paper_form').html('&nbsp;'+url_params['form']);
+			$('#print_paper_covering').html('&nbsp;'+url_params['covering']);
+			$('#print_paper_thermometer').html('&nbsp;'+url_params['thermometer']);
+			$('#print_paper_packing').html('&nbsp;'+url_params['packing']);
+			$('#print_paper_width').html('&nbsp;'+url_params['width']+' мм');
+			$('#print_paper_height').html('&nbsp;'+url_params['height']+' мм');
+			$('#print_paper_file').html('&nbsp;'+url_params['file']);
+			$('#print_paper_cnt').html('&nbsp;'+url_params['cnt']);
+			
+			// load price
+
+		//print form 
+			$('#single_sum_print').html('&nbsp;'+url_params['sum']);
+			$('#sum_total_print').html('&nbsp;'+url_params['total']);
+			$('#sum_vat_total_print').html('&nbsp;'+url_params['vat']);
+			
+		
+		});
+		
+		function getUrlVars(){
+		    var vars = [], hash;
+		    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+		    for(var i = 0; i < hashes.length; i++)
+		    {
+		        hash = hashes[i].split('=');
+		        vars.push(hash[0]);
+		        vars[hash[0]] = unescape(hash[1]);
+		      //  alert('key: '+hash[0]+ ' val: '+unescape(hash[1])+'');
+		    }
+		    return vars;
+		}	
+	</script>  
+  </head>
+  <body>
+	<div id="nav_bar">
+	 	<ul id="nav_btns">
+	 		<li>
+	 			<input type="image" value="" src="images/close.png" onclick="window.close();">
+			</li>
+	 		<li>
+				<input type="image" value="" src="images/print.png" onclick="window.print();return false;">
+			</li>
+	 	</ul>
+	</div>
+	<div id="print_div_content">
+<table width="98%" border="0" cellspacing="0" cellpadding="1">
+ 	<tr>
+ 		<td>
+ 			<img src="images/header.png" border=0 style="width:99%;">
+ 			<br><br>
+ 		</td>
+ 	</tr>
+
+ 	<tr>
+ 		<td>
+
+
+<table style="border-collapse: collapse;" width="99%" border="1" cellspacing="0" cellpadding="1">
+	<colgroup>
+		<col width="100">
+		<col>
+	</colgroup>
+ 	<tr>
+ 		<td colspan="2" style="padding: 3px;padding-left: 5px;background-color: #eee;"><strong>Магнити печат</strong></td>
+ 	</tr>
+ 	<tr>
+ 		<td><div style="width:250px; height:100px;"></div></td>
+ 		<td valign="top">
+			<table style="border-collapse: collapse;" width="100%" border="1" cellspacing="0" cellpadding="0">
+				<colgroup>
+					<col width="160">
+					<col>
+				</colgroup>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">широчина</td>
+					<td id="print_paper_width">(selected)</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">височина</td>
+					<td id="print_paper_height">(selected)</td>
+				</tr>
+
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">форма</td>
+					<td id="print_paper_form">(selected)</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">покритие</td>
+					<td id="print_paper_covering">(selected)</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">термометър</td>
+					<td id="print_paper_thermometer">(selected)</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">целофаниране</td>
+					<td id="print_paper_packing">(selected)</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">файл</td>
+					<td id="print_paper_file">(selected)</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;">брой</td>
+					<td id="print_paper_cnt">(selected)</td>
+				</tr>
+		 	</table>
+		</td>
+ 	</tr>
+
+ 	<tr>
+ 		<td colspan="2">&nbsp;</td>
+ 	</tr>
+ 	<tr>
+ 		<td colspan="2" style="background-color: #eee;">&nbsp;<strong>ЦЕНИ</strong></td>
+ 	</tr>
+ 	<tr>
+ 		<td colspan="2">
+			<table style="border-collapse: collapse;" width="100%" border="1" cellspacing="0" cellpadding="0">
+				<colgroup>
+					<col>
+					<col width="160">
+				</colgroup>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;"><strong>Ед. цена без ДДС</strong></td>
+					<td style="text-align: right;padding-right: 5px;" id="single_sum_print">&nbsp;лв</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;"><strong>ОБЩО БЕЗ ДДС</strong></td>
+					<td style="text-align: right;padding-right: 5px;" id="sum_total_print">&nbsp;лв</td>
+				</tr>
+				<tr>
+					<td style="text-align: right;padding-right: 5px;"><strong>ТОТАЛ</strong></td>
+					<td style="text-align: right;padding-right: 5px;" id="sum_vat_total_print">&nbsp;лв</td>
+				</tr>
+		 	</table>
+		 
+		</td>
+ 	</tr>
+ 	<tr>
+ 		<td colspan="2">&nbsp;</td>
+ 	</tr>
+ 	<tr>
+ 		<td colspan="2" style="background-color: #eee;">
+<p style="padding: 5px;">
+<strong><u>Срок за изработка:</u></strong><br>
+	Срок за печат до 5 работни дни след одобрение на проекта.
+
+</p> 		
+<p style="padding: 5px;">
+<strong><u>Плащане:</u></strong><br>
+Поръчката за печат се стартира след 50% авансово плащане и при получаване на продукта – 50%.<br>
+При използване на готови рекламни продукти същите се заплащат 100% авансово.
+</p>
+
+<p style="padding: 5px;">
+<strong><u>Валидност на офертата:</u></strong><br>
+20 дни от датата на издаването
+</p>
+<p style="padding: 5px;">
+<strong><u>Цени:</u></strong><br>
+<ul>
+	<li>Всички посочени цени в настоящата оферта са без начислен ДДС, ако не е отбелязано друго.</li>
+	<li>Цените в настоящата оферта важат само за посочените количества.</li>
+	<li>Посочените в офертата цени не включват дизайн, предпечатна подготовка или обработка на файлове за печат, ако не е отбелязано друго.</li>
+	<li>Плащанията се извършват в български лева (BGN) по официалния курс на БНБ за деня.</li>
+	<li> АВ Дизайн Студио ЕООД си запазва правото на промяна в цената, ако оферираното не съответства на предоставения от клиента дизайн, вид печат, вид материали, или количество и причината за различието не е във фирма  АВ Дизайн Студио ЕООД.</li>
+</ul>
+</p>
+<p style="padding: 5px;">
+<strong><u>Отклонения:</u></strong><br>
+Възможни отклонения в крайното количество +2%/-2%, които се отбелязват в сумата при доплащане.
+</p>
+
+		</td>
+ 	</tr>
+ 	
+</table>
+
+
+ 			
+ 		</td>
+ 	</tr>
+</table>
+	</div>
+
+  </body>
+</html>

@@ -1,0 +1,137 @@
+<table width="100%" class="list" border="1" cellspacing="0" cellpadding="1">
+	<tr>	
+		<th style="padding-top: 6px;padding-bottom: 6px;padding-left: 15px;text-align: left;">Предстоящи задачи</th>
+	</tr>
+	<tr>
+		<td style="background-color: #fff;">
+
+<table width="100%" class="list" border="1" cellspacing="0" cellpadding="1">
+	<colgroup>
+		<col width="30">
+		<col width="100">
+		<col width="160">
+		<col width="80">
+		<col width="120">
+		<col width="160">
+		<col width="180">
+		<col width="160">
+		<col width="60">
+		<col width="60">
+	</colgroup>
+	<tr>	
+		<th><input type="checkbox"></th>
+		<th>No Поръчка</th>
+		<th>Клиент</th>
+		<th>Статус</th>
+		<th>За дата</th>
+		<th>Потребител</th>
+		<th>Опсиание</th>
+		<th>Контрагент</th>
+		<th>Сума</th>
+		<th>Действие</th>
+	</tr>
+	<?php
+//	printArray($activities);
+		$cnt_break = 1;
+	?>
+	<?php if (count($activities)) { ?>
+	<?php foreach ($activities as $d_id => $item) { 
+	$box_title = " - ";
+	$box_content = "";	
+	$box_content = _clear($box_content);
+
+	$doc_class = "";
+	switch($item["DStatus"]) {
+		case DOC_ORDER_STATUS_E:
+			$doc_class = "mark-red";
+			break;
+		case DOC_ORDER_STATUS_A:
+			$doc_class = "mark-green";
+			break;
+		case DOC_ORDER_STATUS_R:
+			$doc_class = "mark-blue";
+			break;
+		case DOC_ORDER_STATUS_N:
+			default:
+			$doc_class = "mark-gray";
+			break;
+	}
+	?>
+	
+	<?php if (count($item["ITEM_A"])) { ?>
+		<tr>	
+			<td align="center"><input type="checkbox"></td>
+			<td colspan=9><b>Дейности</b></td>
+		</tr>	
+	<?php 
+	foreach ($item["ITEM_A"] as $k => $v) { 
+		if ($v["card_status"] != 0) continue;
+	$v["card_status"] = $v["card_status"]?CARD_STATUS_F:CARD_STATUS_W;
+		if ($v["card_status"] == 0)
+			$cnt_break++;
+	?>
+		<tr>	
+			<td align="center"><input type="checkbox"></td>
+			<td><?php echo _fnes($item["DocNum"]); ?></td>
+			<td><?php echo _fnes($item["PName"]); ?></td>
+			<td align="center"><?php echo _fnes($GLOBALS["CARD_STATUS"][$v["card_status"]]); ?></td>
+			<td align="center"><?php echo _fnes($v["card_date"]); ?></td>
+			<td><?php echo _fnes($v["fullName"]); ?></td>
+			<td><?php echo _fnes($v["card_notes"]); ?></td>
+			<td>-</td>
+			<td>-</td>
+			<td width="60" class="action"><a class="sadd" href="<?php echo $action_edit.$d_id.get_filter(); ?>"></a></td>
+		</tr>	
+	<?php } ?>
+	<?php } ?>
+	<?php if (count($item["ITEM_C"])) { 
+	?>
+		<tr>	
+			<td align="center"><input type="checkbox"></td>
+			<td colspan=9><b>Контрагенти</b></td>
+		</tr>	
+	<?php foreach ($item["ITEM_C"] as $k => $v) { 
+		if ($v["CStatus"] != 0) continue;
+		$v["CStatus"] = $v["CStatus"]?CARD_STATUS_F:CARD_STATUS_W;
+		if ($v["CStatus"] == 0)
+			$cnt_break++;
+	?>
+		<tr>	
+			<td align="center"><input type="checkbox"></td>
+			<td onclick="setPopUpBox('<?php echo $box_title;?>', '<?php echo $box_content;?>');"><?php echo _fnes($item["DocNum"]); ?></td>
+			<td><?php echo _fnes($item["PName"]); ?></td>
+			<td align="center"><?php echo _fnes($GLOBALS["CARD_STATUS"][$v["CStatus"]]); ?></td>
+			<td align="center"><?php echo _fnes($v["CDate"]); ?></td>
+			<td><?php echo _fnes($v["fullName"]); ?></td>
+			<td><?php echo _fnes($v["CNotes"]); ?></td>
+			<td><?php echo _fnes($v["CName"]); ?></td>
+			<td align="right"><?php echo _fnes($v["CSum"]); ?></td>
+			<td width="60" class="action"><a class="sadd" href="<?php echo $action_edit.$d_id.get_filter(); ?>"></a></td>
+		</tr>	
+	<?php } ?>
+	<?php } ?>
+	
+	<?php 
+		if ($cnt_break == 10) break;
+	?>
+	
+	<?php } ?>
+	<?php } ?>
+</table>
+
+		
+		</td>
+	</tr>
+</table>
+<p>&nbsp;</p>
+<ul id="dash_menu">
+	<li><a href="<?php echo HTTP_SERVER."index.php?route=documents&tab=all&token=".get_token();?>" class="doc"><h1>Документи</h1></a></li>
+	<li><a href="<?php echo HTTP_SERVER."index.php?route=reports&tab=patners&token=".get_token();?>" class="report"><h1>Справки</h1></a></li>
+	<li><a href="<?php echo HTTP_SERVER."index.php?route=patners&tab=list&token=".get_token();?>" class="partner"><h1>Клиенти</h1></a></li>
+	<li><a href="<?php echo HTTP_SERVER."index.php?route=contractors&tab=list&token=".get_token();?>" class="contractor"><h1>Контрагенти</h1></a></li>
+	<li><a href="<?php echo HTTP_SERVER."index.php?route=activities&tab=all&token=".get_token();?>" class="activity"><h1>Дейности</h1></a></li>
+	<li><a href="<?php echo HTTP_SERVER."index.php?route=payoffice&tab=list&token=".get_token();?>" class="payoffice"><h1>Каса</h1></a></li>
+	<li><a href="<?php echo HTTP_SERVER."index.php?route=settings&tab=users&token=".get_token();?>" class="settings"><h1>Настройка</h1></a></li>
+	<li><a href="<?php echo HTTP_SERVER."backup/"; ?>" class="data"><h1>Данни</h1></a></li>
+</ul>
+<div class="clear"></div>
